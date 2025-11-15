@@ -1,4 +1,5 @@
 let pianoImg;
+let oscillators = [];
 let keys = [];
 
 function preload() {
@@ -8,6 +9,13 @@ function preload() {
 function setup() {
     createCanvas(800, 320);
     setupKeys();
+
+    for (let i = 0; i < keys.length; i++) {
+        oscillators[i] = new p5.Oscillator('sine');
+        oscillators[i].amp(0);
+        oscillators[i].freq(keys[i].freq);
+        oscillators[i].start();
+    }
 }
 
 function setupKeys() {
