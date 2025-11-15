@@ -26,12 +26,18 @@ function setupKeys() {
     let blackW = 31;
     let blackH = 112;
 
+    let whitePositions = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14];
     let blackPositions = [
         {after: 0, offset: 0.65},
         {after: 1, offset: 0.65},
         {after: 3, offset: 0.65},
         {after: 4, offset: 0.65},
-        {after: 5, offset: 0.65}
+        {after: 5, offset: 0.65},
+        {after: 7, offset: 0.65},
+        {after: 8, offset: 0.65},
+        {after: 10, offset: 0.65},
+        {after: 11, offset: 0.65},
+        {after: 12, offset: 0.65}
     ];
 
     let allNotes = [
@@ -47,7 +53,18 @@ function setupKeys() {
         {name: 'A (라)', freq: 440.00, white: true, pos: 5},
         {name: 'A#', freq: 466.16, white: false, blackIdx: 4},
         {name: 'B (시)', freq: 493.88, white: true, pos: 6},
-        {name: 'C5 (도)', freq: 523.25, white: true, pos: 7}
+        {name: 'C5 (도)', freq: 523.25, white: true, pos: 7},
+        {name: 'C5#', freq: 554.37, white: false, blackIdx: 5},
+        {name: 'D5 (레)', freq: 587.33, white: true, pos: 8},
+        {name: 'D5#', freq: 622.25, white: false, blackIdx: 6},
+        {name: 'E5 (미)', freq: 659.25, white: true, pos: 9},
+        {name: 'F5 (파)', freq: 698.46, white: true, pos: 10},
+        {name: 'F5#', freq: 739.99, white: false, blackIdx: 7},
+        {name: 'G5 (솔)', freq: 783.99, white: true, pos: 11},
+        {name: 'G5#', freq: 830.61, white: false, blackIdx: 8},
+        {name: 'A5 (라)', freq: 880.00, white: true, pos: 12},
+        {name: 'A5#', freq: 932.33, white: false, blackIdx: 9},
+        {name: 'B5 (시)', freq: 987.77, white: true, pos: 13}
     ];
 
     for (let note of allNotes) {
@@ -86,6 +103,33 @@ function setupKeys() {
 function draw() {
     background(240);
     image(pianoImg, 0, 0, width, height);
+
+    for (let key of keys) {
+        if (key.isPressed) {
+            if (key.isBlack) {
+                fill(80, 80, 120, 150);
+            } else {
+                fill(180, 180, 220, 120);
+            }
+            noStroke();
+            rect(key.x, key.y, key.w, key.h);
+        }
+    }
+
+    fill(0);
+    noStroke();
+    textAlign(CENTER);
+    textSize(16);
+    if (!audioStarted) {
+        text('아무 건반이나 클릭하여 피아노 연주를 시작하세요 🎈', width / 2, 25);
+    } else {
+        text('피아노 연주 중...🎶🪽', width / 2, 25);
+    }
+
+    fill(80, 80, 80);
+    textSize(12);
+    textAlign(LEFT);
+    text('🐭👆마우스 위치: ' + mouseX + ', ' + mouseY, 10, height - 10);
 }
 
 function mousePressed() {
