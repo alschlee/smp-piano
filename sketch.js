@@ -1,6 +1,7 @@
 let pianoImg;
 let oscillators = [];
 let keys = [];
+let audioStarted = false;
 
 function preload() {
     pianoImg = loadImage('piano.png');
@@ -14,7 +15,6 @@ function setup() {
         oscillators[i] = new p5.Oscillator('sine');
         oscillators[i].amp(0);
         oscillators[i].freq(keys[i].freq);
-        oscillators[i].start();
     }
 }
 
@@ -86,4 +86,51 @@ function setupKeys() {
 function draw() {
     background(240);
     image(pianoImg, 0, 0, width, height);
+}
+
+function mousePressed() {
+    if (!audioStarted) {
+        userStartAudio();
+        for (let osc of oscillators) {
+            osc.start();
+        }
+        audioStarted = true;
+    }
+
+    for (let i = keys.length - 1; i >= 0; i--) {
+        let key = keys[i];
+        if (key.isBlack) {
+            if (mouseX >= key.x && mouseX <= key.x + key.w &&
+                mouseY >= key.y && mouseY <= key.y + key.h) {
+                playNote(i);
+                console.log('Black key pressed: ' + key.name);
+                return;
+            }
+        }
+    }
+
+    for (let i = 0; i < keys.length; i++) {
+        let key = keys[i];
+        if (!key.isBlack) {
+            if (mouseX >= key.x && mouseX <= key.x + key.w &&
+                mouseY >= key.y && mouseY <= key.y + key.h) {
+                playNote(i);
+                console.log('White key pressed: ' + key.name);
+                return;
+            }
+        }
+    }
+}
+
+function mouseReleased() {
+    for (let i = 0; i < oscillators.length; i++) {
+        oscillators[i].amp(0, 0.1);
+        keys[i].isPressed = false;
+    }
+}
+
+function playNote(index) {
+    oscillators[index].amp(0.4, 0.05);
+    keys[index].isPressed = true;
+    console.log('Playing: ' + keys[index].name + ' - ' + keys[index].freq + ' Hz');
 }
