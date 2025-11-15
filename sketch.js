@@ -1,8 +1,14 @@
+let pianoImg;
+
+function preload() {
+    pianoImg = loadImage('piano.png');
+}
+
 function setup() {
-    createCanvas(400, 400);
+    createCanvas(800, 320);
 }
 
 function draw() {
-    background(220);
-    text("반갑다", 10, 10);
+    background(240);
+    image(pianoImg, 0, 0, width, height);
 }
